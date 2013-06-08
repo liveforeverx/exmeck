@@ -1,4 +1,4 @@
-defmodule Exmeck.Mock do
+defmodule Exmeck do
 
   defmacro __using__(opts // []) do
     mockfunctions = quote do
@@ -9,7 +9,7 @@ defmodule Exmeck.Mock do
                                    __start_fun__: :start_fun] do
       quote do
         Module.register_attribute __MODULE__, unquote(attr), persist: false, accumulate: false
-        Module.put_attribute __MODULE__, attr, unquote(opts[opt])
+        Module.put_attribute __MODULE__, unquote(attr), unquote(opts[opt])
       end
     end
     quote do
@@ -39,6 +39,7 @@ defmodule Exmeck.Mock do
         Module.get_attribute(env.module, attr)
       end
     unless name, do: name = :_mocking
+    unless options, do: options = []
     functions = lc {func, length} inlist mockFunctions do
       quote do
         :meck.expect(
@@ -49,7 +50,7 @@ defmodule Exmeck.Mock do
       end
     end
     quote do
-      def unquote(name), unquote(
+      def unquote(name)(), unquote(
           do: {:__block__, [],
             [(quote do: :meck.new(unquote(mock), unquote(options))) | functions]}
         )
