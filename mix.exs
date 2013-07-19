@@ -13,6 +13,6 @@ defmodule Exmeck.Mixfile do
   end
 
   defp deps do
-    [{ :meck, %r(.*), github: "eproxus/meck"}]
+    [{ :meck, github: "eproxus/meck"}]
   end
 end
