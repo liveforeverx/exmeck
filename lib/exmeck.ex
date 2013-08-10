@@ -45,7 +45,7 @@ defmodule Exmeck do
         :meck.expect(
           unquote(mock),
           unquote(func),
-          function(__MODULE__, unquote(func), unquote(length))
+          &(__MODULE__.unquote(func)/unquote(length))
         )
       end
     end
