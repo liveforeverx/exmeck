@@ -1,3 +1,5 @@
 /ebin
 /deps
+/_build
+mix.lock
 erl_crash.dump

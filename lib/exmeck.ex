@@ -1,6 +1,6 @@
 defmodule Exmeck do
 
-  defmacro __using__(opts // []) do
+  defmacro __using__(opts \\ []) do
     mockfunctions = quote do
       Module.register_attribute __MODULE__, :__mockfuncs__, persist: false, accumulate: true
     end
@@ -20,7 +20,7 @@ defmodule Exmeck do
     end
   end
 
-  defmacro mock(func, _options // [], body) do
+  defmacro mock(func, _options \\ [], body) do
     {funcname, _, args} = func
     argslen = len(args)
     quote do
