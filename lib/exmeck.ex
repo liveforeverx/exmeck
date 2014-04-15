@@ -4,9 +4,9 @@ defmodule Exmeck do
     mockfunctions = quote do
       Module.register_attribute __MODULE__, :__mockfuncs__, persist: false, accumulate: true
     end
-    other = lc {attr, opt} inlist [__mockmodule__: :mock,
-                                   __options__: :options,
-                                   __start_fun__: :start_fun] do
+    other = for {attr, opt} <- [__mockmodule__: :mock,
+                                __options__: :options,
+                                __start_fun__: :start_fun] do
       quote do
         Module.register_attribute __MODULE__, unquote(attr), persist: false, accumulate: false
         Module.put_attribute __MODULE__, unquote(attr), unquote(opts[opt])
@@ -35,12 +35,12 @@ defmodule Exmeck do
   defmacro __before_compile__(env) do
     module_attrs = [:__mockfuncs__, :__mockmodule__, :__options__, :__start_fun__]
     [mockFunctions, mock, options, name] =
-      lc attr inlist module_attrs do
+      for attr <- module_attrs do
         Module.get_attribute(env.module, attr)
       end
     unless name, do: name = :_mocking
     unless options, do: options = []
-    functions = lc {func, length} inlist mockFunctions do
+    functions = for {func, length} <- mockFunctions do
       quote do
         :meck.expect(
           unquote(mock),
